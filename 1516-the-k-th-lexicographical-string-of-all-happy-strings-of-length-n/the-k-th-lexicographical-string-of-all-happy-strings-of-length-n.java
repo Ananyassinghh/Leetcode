@@ -1,19 +1,21 @@
 class Solution {
-  public String getHappyString(int n, int k) {
-    Map<Character, String> nextLetters = Map.of('a', "bc", 'b', "ac", 'c', "ab");
-    Queue<String> q = new ArrayDeque<>(List.of("a", "b", "c"));
+    private List<String> ans = new ArrayList<>();
 
-    while (q.peek().length() != n) {
-      final String u = q.poll();
-      for (final char nextLetter : nextLetters.get(u.charAt(u.length() - 1)).toCharArray())
-        q.offer(u + nextLetter);
+    public String getHappyString(int n, int k) {
+        dfs("", n);
+        return ans.size() < k ? "" : ans.get(k - 1);
     }
 
-    if (q.size() < k)
-      return "";
-
-    for (int i = 0; i < k - 1; ++i)
-      q.poll();
-    return q.poll();
-  }
+    private void dfs(String t, int n) {
+        if (t.length() == n) {
+            ans.add(t);
+            return;
+        }
+        for (char c : "abc".toCharArray()) {
+            if (t.length() > 0 && t.charAt(t.length() - 1) == c) {
+                continue;
+            }
+            dfs(t + c, n);
+        }
+    }
 }
